@@ -1,3 +1,5 @@
+[![builds.sr.ht status](https://builds.sr.ht/~tristan957/monkey.svg)](https://builds.sr.ht/~tristan957/monkey?)
+
 # Monkey
 
 An interpreter for the Monkey programming language.

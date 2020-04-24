@@ -1,0 +1,12 @@
+image: alpine/edge
+packages:
+  - go
+sources:
+  - https://git.sr.ht/~tristan957/monkey
+tasks:
+  - build: |
+      cd monkey
+      go build ./...
+  - test: |
+      cd monkey
+      go test ./...
