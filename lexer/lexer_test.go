@@ -65,6 +65,12 @@ let add = fn(x, y) {
 };
 
 let result = add(five, ten);
+
+if (5 < 10) {
+	return true;
+} else {
+	return false;
+}
 `
 
 	tests := []struct {
@@ -108,7 +114,24 @@ let result = add(five, ten);
 		{token.IDENTIFIER, "ten", token.Span{Start: &token.Position{Line: 8, Column: 24}, End: &token.Position{Line: 8, Column: 26}}},
 		{token.RIGHT_PARENTHESES, ")", token.Span{Start: &token.Position{Line: 8, Column: 27}, End: &token.Position{Line: 8, Column: 27}}},
 		{token.SEMICOLON, ";", token.Span{Start: &token.Position{Line: 8, Column: 28}, End: &token.Position{Line: 8, Column: 28}}},
-		{token.EOF, "", token.Span{Start: &token.Position{Line: 9, Column: 1}, End: &token.Position{Line: 9, Column: 1}}},
+		{token.IF, "if", token.Span{Start: &token.Position{Line: 10, Column: 1}, End: &token.Position{Line: 10, Column: 2}}},
+		{token.LEFT_PARENTHESES, "(", token.Span{Start: &token.Position{Line: 10, Column: 4}, End: &token.Position{Line: 10, Column: 4}}},
+		{token.INTEGER, "5", token.Span{Start: &token.Position{Line: 10, Column: 5}, End: &token.Position{Line: 10, Column: 5}}},
+		{token.LESS_THAN, "<", token.Span{Start: &token.Position{Line: 10, Column: 7}, End: &token.Position{Line: 10, Column: 7}}},
+		{token.INTEGER, "10", token.Span{Start: &token.Position{Line: 10, Column: 9}, End: &token.Position{Line: 10, Column: 10}}},
+		{token.RIGHT_PARENTHESES, ")", token.Span{Start: &token.Position{Line: 10, Column: 11}, End: &token.Position{Line: 10, Column: 11}}},
+		{token.LEFT_BRACE, "{", token.Span{Start: &token.Position{Line: 10, Column: 13}, End: &token.Position{Line: 10, Column: 13}}},
+		{token.RETURN, "return", token.Span{Start: &token.Position{Line: 11, Column: 2}, End: &token.Position{Line: 11, Column: 7}}},
+		{token.TRUE, "true", token.Span{Start: &token.Position{Line: 11, Column: 9}, End: &token.Position{Line: 11, Column: 12}}},
+		{token.SEMICOLON, ";", token.Span{Start: &token.Position{Line: 11, Column: 13}, End: &token.Position{Line: 11, Column: 13}}},
+		{token.RIGHT_BRACE, "}", token.Span{Start: &token.Position{Line: 12, Column: 1}, End: &token.Position{Line: 12, Column: 1}}},
+		{token.ELSE, "else", token.Span{Start: &token.Position{Line: 12, Column: 3}, End: &token.Position{Line: 12, Column: 6}}},
+		{token.LEFT_BRACE, "{", token.Span{Start: &token.Position{Line: 12, Column: 8}, End: &token.Position{Line: 12, Column: 8}}},
+		{token.RETURN, "return", token.Span{Start: &token.Position{Line: 13, Column: 2}, End: &token.Position{Line: 13, Column: 7}}},
+		{token.FALSE, "false", token.Span{Start: &token.Position{Line: 13, Column: 9}, End: &token.Position{Line: 13, Column: 13}}},
+		{token.SEMICOLON, ";", token.Span{Start: &token.Position{Line: 13, Column: 14}, End: &token.Position{Line: 13, Column: 14}}},
+		{token.RIGHT_BRACE, "}", token.Span{Start: &token.Position{Line: 14, Column: 1}, End: &token.Position{Line: 14, Column: 1}}},
+		{token.EOF, "", token.Span{Start: &token.Position{Line: 15, Column: 1}, End: &token.Position{Line: 15, Column: 1}}},
 	}
 
 	l := NewFromString(input)

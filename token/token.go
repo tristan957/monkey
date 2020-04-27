@@ -37,6 +37,16 @@ const (
 	FUNCTION = "FUNCTION"
 	// LET represents the 'let' keywork
 	LET = "LET"
+	// TRUE represents the 'true' keyword
+	TRUE = "true"
+	// FALSE represents the 'false' keyword
+	FALSE = "false"
+	// IF represents the 'if' keyword
+	IF = "if"
+	// ELSE represents the 'else' keyword
+	ELSE = "else"
+	// RETURN represents the 'return' keyword
+	RETURN = "return"
 	// UNKNOWN represents an unknown token
 	UNKNOWN = "UNKNOWN"
 	// EOF represents the end of file
