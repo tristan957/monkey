@@ -61,5 +61,5 @@ func (s *Span) Equals(other *Span) bool {
 
 // String returns a string representation of a Span
 func (s *Span) String() string {
-	return fmt.Sprintf("{%s, %s}", s.Start, s.End)
+	return fmt.Sprintf("{%s -> %s}", s.Start, s.End)
 }
