@@ -9,18 +9,30 @@ const (
 	ASSIGN = "="
 	// PLUS represents the addition operator
 	PLUS = "+"
+	// MINUS represents the minus operator
+	MINUS = "-"
+	// BANG represents the bang operator
+	BANG = "!"
+	// ASTERISK represents the asterisk operator
+	ASTERISK = "*"
+	// FORWARD_SLASH represents the forward slash operator
+	FORWARD_SLASH = "/"
+	// LESS_THAN represents the less than operator
+	LESS_THAN = "<"
+	// GREATER_THAN represents the greater than operator
+	GREATER_THAN = ">"
 	// COMMA represents the ',' delimiter
 	COMMA = ","
 	// SEMICOLON represents the ';' delimiter
 	SEMICOLON = ";"
-	// LPAREN represents an opening parentheses
-	LPAREN = "("
-	// RPAREN represents a closing parentheses
-	RPAREN = ")"
-	// LBRACE represents an opening brace
-	LBRACE = "{"
-	// RBRACE represents a closing brace
-	RBRACE = "{"
+	// LEFT_PARENTHESES represents an opening parentheses
+	LEFT_PARENTHESES = "("
+	// RIGHT_PARENTHESES represents a closing parentheses
+	RIGHT_PARENTHESES = ")"
+	// LEFT_BRACE represents an opening brace
+	LEFT_BRACE = "{"
+	// RIGHT_BRACE represents a closing brace
+	RIGHT_BRACE = "{"
 	// FUNCTION represents the 'fn' keyword
 	FUNCTION = "FUNCTION"
 	// LET represents the 'let' keywork

@@ -6,8 +6,8 @@ An interpreter for the Monkey programming language.
 
 ## Customizations
 
-* The lexer operates on buffered I/O instead of reading the entire input as a
-string. This saves on memory usage.
-* Tokens have spans associated with them, so in the case of unknown input, the
-interpreter can report line and column numbers. Spans mark the beginning and
-end of a token.
+- The lexer operates on buffered I/O instead of reading the entire input as a
+  string. This saves on memory usage.
+- Tokens have spans associated with them, so in the case of unknown input, the
+  interpreter can report line and column numbers. Spans mark the beginning and
+  end of a token.

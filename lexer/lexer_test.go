@@ -7,7 +7,7 @@ import (
 )
 
 func TestNextToken_OneLineString(t *testing.T) {
-	input := "=+(){},;"
+	input := "=+-*/(){},;<>!"
 
 	tests := []struct {
 		expectedType    token.Type
@@ -16,13 +16,19 @@ func TestNextToken_OneLineString(t *testing.T) {
 	}{
 		{token.ASSIGN, "=", token.Span{Start: &token.Position{Line: 1, Column: 1}, End: &token.Position{Line: 1, Column: 1}}},
 		{token.PLUS, "+", token.Span{Start: &token.Position{Line: 1, Column: 2}, End: &token.Position{Line: 1, Column: 2}}},
-		{token.LPAREN, "(", token.Span{Start: &token.Position{Line: 1, Column: 3}, End: &token.Position{Line: 1, Column: 3}}},
-		{token.RPAREN, ")", token.Span{Start: &token.Position{Line: 1, Column: 4}, End: &token.Position{Line: 1, Column: 4}}},
-		{token.LBRACE, "{", token.Span{Start: &token.Position{Line: 1, Column: 5}, End: &token.Position{Line: 1, Column: 5}}},
-		{token.RBRACE, "}", token.Span{Start: &token.Position{Line: 1, Column: 6}, End: &token.Position{Line: 1, Column: 6}}},
-		{token.COMMA, ",", token.Span{Start: &token.Position{Line: 1, Column: 7}, End: &token.Position{Line: 1, Column: 7}}},
-		{token.SEMICOLON, ";", token.Span{Start: &token.Position{Line: 1, Column: 8}, End: &token.Position{Line: 1, Column: 8}}},
-		{token.EOF, "", token.Span{Start: &token.Position{Line: 1, Column: 9}, End: &token.Position{Line: 1, Column: 9}}},
+		{token.MINUS, "-", token.Span{Start: &token.Position{Line: 1, Column: 3}, End: &token.Position{Line: 1, Column: 3}}},
+		{token.ASTERISK, "*", token.Span{Start: &token.Position{Line: 1, Column: 4}, End: &token.Position{Line: 1, Column: 4}}},
+		{token.FORWARD_SLASH, "/", token.Span{Start: &token.Position{Line: 1, Column: 5}, End: &token.Position{Line: 1, Column: 5}}},
+		{token.LEFT_PARENTHESES, "(", token.Span{Start: &token.Position{Line: 1, Column: 6}, End: &token.Position{Line: 1, Column: 6}}},
+		{token.RIGHT_PARENTHESES, ")", token.Span{Start: &token.Position{Line: 1, Column: 7}, End: &token.Position{Line: 1, Column: 7}}},
+		{token.LEFT_BRACE, "{", token.Span{Start: &token.Position{Line: 1, Column: 8}, End: &token.Position{Line: 1, Column: 8}}},
+		{token.RIGHT_BRACE, "}", token.Span{Start: &token.Position{Line: 1, Column: 9}, End: &token.Position{Line: 1, Column: 9}}},
+		{token.COMMA, ",", token.Span{Start: &token.Position{Line: 1, Column: 10}, End: &token.Position{Line: 1, Column: 10}}},
+		{token.SEMICOLON, ";", token.Span{Start: &token.Position{Line: 1, Column: 11}, End: &token.Position{Line: 1, Column: 11}}},
+		{token.LESS_THAN, "<", token.Span{Start: &token.Position{Line: 1, Column: 12}, End: &token.Position{Line: 1, Column: 12}}},
+		{token.GREATER_THAN, ">", token.Span{Start: &token.Position{Line: 1, Column: 13}, End: &token.Position{Line: 1, Column: 13}}},
+		{token.BANG, "!", token.Span{Start: &token.Position{Line: 1, Column: 14}, End: &token.Position{Line: 1, Column: 14}}},
+		{token.EOF, "", token.Span{Start: &token.Position{Line: 1, Column: 15}, End: &token.Position{Line: 1, Column: 15}}},
 	}
 
 	l := NewFromString(input)
@@ -80,27 +86,27 @@ let result = add(five, ten);
 		{token.IDENTIFIER, "add", token.Span{Start: &token.Position{Line: 4, Column: 5}, End: &token.Position{Line: 4, Column: 7}}},
 		{token.ASSIGN, "=", token.Span{Start: &token.Position{Line: 4, Column: 9}, End: &token.Position{Line: 4, Column: 9}}},
 		{token.FUNCTION, "fn", token.Span{Start: &token.Position{Line: 4, Column: 11}, End: &token.Position{Line: 4, Column: 12}}},
-		{token.LPAREN, "(", token.Span{Start: &token.Position{Line: 4, Column: 13}, End: &token.Position{Line: 4, Column: 13}}},
+		{token.LEFT_PARENTHESES, "(", token.Span{Start: &token.Position{Line: 4, Column: 13}, End: &token.Position{Line: 4, Column: 13}}},
 		{token.IDENTIFIER, "x", token.Span{Start: &token.Position{Line: 4, Column: 14}, End: &token.Position{Line: 4, Column: 14}}},
 		{token.COMMA, ",", token.Span{Start: &token.Position{Line: 4, Column: 15}, End: &token.Position{Line: 4, Column: 15}}},
 		{token.IDENTIFIER, "y", token.Span{Start: &token.Position{Line: 4, Column: 17}, End: &token.Position{Line: 4, Column: 17}}},
-		{token.RPAREN, ")", token.Span{Start: &token.Position{Line: 4, Column: 18}, End: &token.Position{Line: 4, Column: 18}}},
-		{token.LBRACE, "{", token.Span{Start: &token.Position{Line: 4, Column: 20}, End: &token.Position{Line: 4, Column: 20}}},
+		{token.RIGHT_PARENTHESES, ")", token.Span{Start: &token.Position{Line: 4, Column: 18}, End: &token.Position{Line: 4, Column: 18}}},
+		{token.LEFT_BRACE, "{", token.Span{Start: &token.Position{Line: 4, Column: 20}, End: &token.Position{Line: 4, Column: 20}}},
 		{token.IDENTIFIER, "x", token.Span{Start: &token.Position{Line: 5, Column: 2}, End: &token.Position{Line: 5, Column: 2}}},
 		{token.PLUS, "+", token.Span{Start: &token.Position{Line: 5, Column: 4}, End: &token.Position{Line: 5, Column: 4}}},
 		{token.IDENTIFIER, "y", token.Span{Start: &token.Position{Line: 5, Column: 6}, End: &token.Position{Line: 5, Column: 6}}},
 		{token.SEMICOLON, ";", token.Span{Start: &token.Position{Line: 5, Column: 7}, End: &token.Position{Line: 5, Column: 7}}},
-		{token.RBRACE, "}", token.Span{Start: &token.Position{Line: 6, Column: 1}, End: &token.Position{Line: 6, Column: 1}}},
+		{token.RIGHT_BRACE, "}", token.Span{Start: &token.Position{Line: 6, Column: 1}, End: &token.Position{Line: 6, Column: 1}}},
 		{token.SEMICOLON, ";", token.Span{Start: &token.Position{Line: 6, Column: 2}, End: &token.Position{Line: 6, Column: 2}}},
 		{token.LET, "let", token.Span{Start: &token.Position{Line: 8, Column: 1}, End: &token.Position{Line: 8, Column: 3}}},
 		{token.IDENTIFIER, "result", token.Span{Start: &token.Position{Line: 8, Column: 5}, End: &token.Position{Line: 8, Column: 10}}},
 		{token.ASSIGN, "=", token.Span{Start: &token.Position{Line: 8, Column: 12}, End: &token.Position{Line: 8, Column: 12}}},
 		{token.IDENTIFIER, "add", token.Span{Start: &token.Position{Line: 8, Column: 14}, End: &token.Position{Line: 8, Column: 16}}},
-		{token.LPAREN, "(", token.Span{Start: &token.Position{Line: 8, Column: 17}, End: &token.Position{Line: 8, Column: 17}}},
+		{token.LEFT_PARENTHESES, "(", token.Span{Start: &token.Position{Line: 8, Column: 17}, End: &token.Position{Line: 8, Column: 17}}},
 		{token.IDENTIFIER, "five", token.Span{Start: &token.Position{Line: 8, Column: 18}, End: &token.Position{Line: 8, Column: 21}}},
 		{token.COMMA, ",", token.Span{Start: &token.Position{Line: 8, Column: 22}, End: &token.Position{Line: 8, Column: 22}}},
 		{token.IDENTIFIER, "ten", token.Span{Start: &token.Position{Line: 8, Column: 24}, End: &token.Position{Line: 8, Column: 26}}},
-		{token.RPAREN, ")", token.Span{Start: &token.Position{Line: 8, Column: 27}, End: &token.Position{Line: 8, Column: 27}}},
+		{token.RIGHT_PARENTHESES, ")", token.Span{Start: &token.Position{Line: 8, Column: 27}, End: &token.Position{Line: 8, Column: 27}}},
 		{token.SEMICOLON, ";", token.Span{Start: &token.Position{Line: 8, Column: 28}, End: &token.Position{Line: 8, Column: 28}}},
 		{token.EOF, "", token.Span{Start: &token.Position{Line: 9, Column: 1}, End: &token.Position{Line: 9, Column: 1}}},
 	}

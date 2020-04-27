@@ -56,20 +56,32 @@ func (l *Lexer) NextToken() (token.Token, error) {
 	switch l.ch {
 	case '=':
 		tok = l.newToken(token.ASSIGN)
+	case '+':
+		tok = l.newToken(token.PLUS)
+	case '-':
+		tok = l.newToken(token.MINUS)
+	case '*':
+		tok = l.newToken(token.ASTERISK)
+	case '/':
+		tok = l.newToken(token.FORWARD_SLASH)
+	case '!':
+		tok = l.newToken(token.BANG)
+	case '<':
+		tok = l.newToken(token.LESS_THAN)
+	case '>':
+		tok = l.newToken(token.GREATER_THAN)
 	case ';':
 		tok = l.newToken(token.SEMICOLON)
 	case '(':
-		tok = l.newToken(token.LPAREN)
+		tok = l.newToken(token.LEFT_PARENTHESES)
 	case ')':
-		tok = l.newToken(token.RPAREN)
+		tok = l.newToken(token.RIGHT_PARENTHESES)
 	case ',':
 		tok = l.newToken(token.COMMA)
-	case '+':
-		tok = l.newToken(token.PLUS)
 	case '{':
-		tok = l.newToken(token.LBRACE)
+		tok = l.newToken(token.LEFT_BRACE)
 	case '}':
-		tok = l.newToken(token.RBRACE)
+		tok = l.newToken(token.RIGHT_BRACE)
 	case 0:
 		currPositionCopy := l.currPosition.Copy()
 		tok.Literal = ""
