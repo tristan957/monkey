@@ -71,6 +71,10 @@ if (5 < 10) {
 } else {
 	return false;
 }
+
+let b = 0b010101;
+let o = 0o123456;
+let h = 0xabF127;
 `
 
 	tests := []struct {
@@ -131,7 +135,22 @@ if (5 < 10) {
 		{token.FALSE, "false", token.Span{Start: &token.Position{Line: 13, Column: 9}, End: &token.Position{Line: 13, Column: 13}}},
 		{token.SEMICOLON, ";", token.Span{Start: &token.Position{Line: 13, Column: 14}, End: &token.Position{Line: 13, Column: 14}}},
 		{token.RIGHT_BRACE, "}", token.Span{Start: &token.Position{Line: 14, Column: 1}, End: &token.Position{Line: 14, Column: 1}}},
-		{token.EOF, "", token.Span{Start: &token.Position{Line: 15, Column: 1}, End: &token.Position{Line: 15, Column: 1}}},
+		{token.LET, "let", token.Span{Start: &token.Position{Line: 16, Column: 1}, End: &token.Position{Line: 16, Column: 3}}},
+		{token.IDENTIFIER, "b", token.Span{Start: &token.Position{Line: 16, Column: 5}, End: &token.Position{Line: 16, Column: 5}}},
+		{token.ASSIGN, "=", token.Span{Start: &token.Position{Line: 16, Column: 7}, End: &token.Position{Line: 16, Column: 7}}},
+		{token.INTEGER, "0b010101", token.Span{Start: &token.Position{Line: 16, Column: 9}, End: &token.Position{Line: 16, Column: 16}}},
+		{token.SEMICOLON, ";", token.Span{Start: &token.Position{Line: 16, Column: 17}, End: &token.Position{Line: 16, Column: 17}}},
+		{token.LET, "let", token.Span{Start: &token.Position{Line: 17, Column: 1}, End: &token.Position{Line: 17, Column: 3}}},
+		{token.IDENTIFIER, "o", token.Span{Start: &token.Position{Line: 17, Column: 5}, End: &token.Position{Line: 17, Column: 5}}},
+		{token.ASSIGN, "=", token.Span{Start: &token.Position{Line: 17, Column: 7}, End: &token.Position{Line: 17, Column: 7}}},
+		{token.INTEGER, "0o123456", token.Span{Start: &token.Position{Line: 17, Column: 9}, End: &token.Position{Line: 17, Column: 16}}},
+		{token.SEMICOLON, ";", token.Span{Start: &token.Position{Line: 17, Column: 17}, End: &token.Position{Line: 17, Column: 17}}},
+		{token.LET, "let", token.Span{Start: &token.Position{Line: 18, Column: 1}, End: &token.Position{Line: 18, Column: 3}}},
+		{token.IDENTIFIER, "h", token.Span{Start: &token.Position{Line: 18, Column: 5}, End: &token.Position{Line: 18, Column: 5}}},
+		{token.ASSIGN, "=", token.Span{Start: &token.Position{Line: 18, Column: 7}, End: &token.Position{Line: 18, Column: 7}}},
+		{token.INTEGER, "0xabF127", token.Span{Start: &token.Position{Line: 18, Column: 9}, End: &token.Position{Line: 18, Column: 16}}},
+		{token.SEMICOLON, ";", token.Span{Start: &token.Position{Line: 18, Column: 17}, End: &token.Position{Line: 18, Column: 17}}},
+		{token.EOF, "", token.Span{Start: &token.Position{Line: 19, Column: 1}, End: &token.Position{Line: 19, Column: 1}}},
 	}
 
 	l := NewFromString(input)

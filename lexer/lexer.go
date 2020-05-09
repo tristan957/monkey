@@ -6,6 +6,7 @@ import (
 	"io"
 	"strings"
 	"unicode"
+	"unicode/utf8"
 
 	"git.sr.ht/~tristan957/monkey/token"
 )
@@ -107,9 +108,45 @@ func (l *Lexer) NextToken() (token.Token, error) {
 			return tok, nil
 		} else if isDigit(l.ch) {
 			tok.Span.Start = l.currPosition.Copy()
-			number, err := l.readInteger()
-			if err != nil {
-				return tok, err
+			var number string
+			if l.ch == '0' {
+				// peek the literal prefix
+				ch, err := l.input.Peek(1)
+				if err != nil {
+					return tok, fmt.Errorf("Failed to peek character at line %d, column %d: %w", l.nextPosition.Line, l.nextPosition.Column, err)
+				}
+				rn, size := utf8.DecodeRune(ch)
+				switch rn {
+				case token.BINARY_PREFIX:
+					number, err = l.readBinaryInteger()
+					if err != nil {
+						return tok, err
+					}
+				case token.OCTAL_PREFIX:
+					number, err = l.readOctalInteger()
+					if err != nil {
+						return tok, err
+					}
+				case token.HEXADECIMAL_PREFIX:
+					number, err = l.readHexadecimalInteger()
+					if err != nil {
+						return tok, err
+					}
+				case utf8.RuneError:
+					if size == 1 {
+						return tok, fmt.Errorf("Invalid UTF-8 (empty character) at line %d, column %d", l.nextPosition.Line, l.nextPosition.Column)
+					} else if size == 0 {
+						return tok, fmt.Errorf("Invalid encoding, not UTF-8 at line %d, column %d", l.nextPosition.Line, l.nextPosition.Column)
+					}
+				default:
+					return tok, fmt.Errorf("Unrecognized integer prefix '%q'", rn)
+				}
+			} else {
+				var err error
+				number, err = l.readInteger()
+				if err != nil {
+					return tok, err
+				}
 			}
 
 			tok.Literal = number
@@ -182,6 +219,21 @@ func isDigit(ch rune) bool {
 	return '0' <= ch && ch <= '9'
 }
 
+// isBinaryDigit checks if the input is a binary digit.
+func isBinaryDigit(ch rune) bool {
+	return ch == '0' || ch == '1'
+}
+
+// isOctalDigit checks if the input is an octal digit.
+func isOctalDigit(ch rune) bool {
+	return '0' <= ch && ch <= '7'
+}
+
+// isHexadecimalDigit checks if the input is a hexadecimal digit.
+func isHexadecimalDigit(ch rune) bool {
+	return 'a' <= ch && ch <= 'f' || 'A' <= ch && ch <= 'F' || isDigit(ch)
+}
+
 // readInteger reads an identifier name
 func (l *Lexer) readIdentifier() (string, error) {
 	var builder strings.Builder
@@ -195,11 +247,13 @@ func (l *Lexer) readIdentifier() (string, error) {
 	return builder.String(), nil
 }
 
-// readInteger reads an integer
+// readInteger reads an integer.
 func (l *Lexer) readInteger() (string, error) {
 	var builder strings.Builder
 	for isDigit(l.ch) {
-		builder.WriteRune(l.ch)
+		if _, err := builder.WriteRune(l.ch); err != nil {
+			return "", fmt.Errorf("Unable to write integer literal (%q) at line %d, column %d", l.ch, l.currPosition.Line, l.currPosition.Column)
+		}
 		if err := l.readChar(); err != nil {
 			return "", err
 		}
@@ -208,7 +262,97 @@ func (l *Lexer) readInteger() (string, error) {
 	return builder.String(), nil
 }
 
-// consumeWhitespace eats all whitespace characters between tokens
+// readBinaryInteger reads a binary integer.
+func (l *Lexer) readBinaryInteger() (string, error) {
+	var builder strings.Builder
+
+	// write the 0
+	if _, err := builder.WriteRune(l.ch); err != nil {
+		return "", fmt.Errorf("Unable to write binary integer literal (%q) at line %d, column %d", l.ch, l.currPosition.Line, l.currPosition.Column)
+	}
+	if err := l.readChar(); err != nil {
+		return "", err
+	}
+	if _, err := builder.WriteRune(token.BINARY_PREFIX); err != nil {
+		return "", fmt.Errorf("Unable to write binary integer literal (%q) at line %d, column %d", token.BINARY_PREFIX, l.currPosition.Line, l.currPosition.Column)
+	}
+	if err := l.readChar(); err != nil {
+		return "", err
+	}
+
+	for isBinaryDigit(l.ch) {
+		if _, err := builder.WriteRune(l.ch); err != nil {
+			return "", fmt.Errorf("Unable to write binary integer literal (%q) at line %d, column %d", l.ch, l.currPosition.Line, l.currPosition.Column)
+		}
+		if err := l.readChar(); err != nil {
+			return "", err
+		}
+	}
+
+	return builder.String(), nil
+}
+
+// readOctalInteger reads a binary integer.
+func (l *Lexer) readOctalInteger() (string, error) {
+	var builder strings.Builder
+
+	// write the 0
+	if _, err := builder.WriteRune(l.ch); err != nil {
+		return "", fmt.Errorf("Unable to write binary integer literal (%q) at line %d, column %d", l.ch, l.currPosition.Line, l.currPosition.Column)
+	}
+	if err := l.readChar(); err != nil {
+		return "", err
+	}
+	if _, err := builder.WriteRune(token.OCTAL_PREFIX); err != nil {
+		return "", fmt.Errorf("Unable to write octal integer literal (%q) at line %d, column %d", token.OCTAL_PREFIX, l.currPosition.Line, l.currPosition.Column)
+	}
+	if err := l.readChar(); err != nil {
+		return "", err
+	}
+
+	for isOctalDigit(l.ch) {
+		if _, err := builder.WriteRune(l.ch); err != nil {
+			return "", fmt.Errorf("Unable to write octal integer literal (%q) at line %d, column %d", l.ch, l.currPosition.Line, l.currPosition.Column)
+		}
+		if err := l.readChar(); err != nil {
+			return "", err
+		}
+	}
+
+	return builder.String(), nil
+}
+
+// readHexadecimalInteger reads a binary integer.
+func (l *Lexer) readHexadecimalInteger() (string, error) {
+	var builder strings.Builder
+
+	// write the 0
+	if _, err := builder.WriteRune(l.ch); err != nil {
+		return "", fmt.Errorf("Unable to write hexadecimal integer literal (%q) at line %d, column %d", l.ch, l.currPosition.Line, l.currPosition.Column)
+	}
+	if err := l.readChar(); err != nil {
+		return "", err
+	}
+	if _, err := builder.WriteRune(token.HEXADECIMAL_PREFIX); err != nil {
+		return "", fmt.Errorf("Unable to write hexadecimal integer literal (%q) at line %d, column %d", token.HEXADECIMAL_PREFIX, l.currPosition.Line, l.currPosition.Column)
+	}
+	if err := l.readChar(); err != nil {
+		return "", err
+	}
+
+	for isHexadecimalDigit(l.ch) {
+		if _, err := builder.WriteRune(l.ch); err != nil {
+			return "", fmt.Errorf("Unable to write hexadecimal integer literal (%q) at line %d, column %d", l.ch, l.currPosition.Line, l.currPosition.Column)
+		}
+		if err := l.readChar(); err != nil {
+			return "", err
+		}
+	}
+
+	return builder.String(), nil
+}
+
+// consumeWhitespace eats all whitespace characters between tokens.
 func (l *Lexer) consumeWhitespace() error {
 	for l.ch == ' ' || l.ch == '\t' || l.ch == '\r' || l.ch == '\n' {
 		if err := l.readChar(); err != nil {

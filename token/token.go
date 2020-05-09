@@ -53,6 +53,15 @@ const (
 	EOF = "EOF"
 )
 
+const (
+	// BINARY_PREFIX is the prefix for binary integer literals
+	BINARY_PREFIX = 'b'
+	// OCTAL_PREFIX is the prefix for octal integer literals
+	OCTAL_PREFIX = 'o'
+	// HEXADECIMAL_PREFIX is the prefix for hexadecimal integer literals
+	HEXADECIMAL_PREFIX = 'x'
+)
+
 // Type is the type of the token
 type Type string
 
