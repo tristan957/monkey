@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"strings"
+	"unicode"
 
 	"git.sr.ht/~tristan957/monkey/token"
 )
@@ -14,7 +15,7 @@ type Lexer struct {
 	input        *bufio.Reader
 	currPosition *token.Position
 	nextPosition *token.Position
-	ch           byte
+	ch           rune
 }
 
 // NewFromString creates a new Lexer when given a string input.
@@ -150,15 +151,17 @@ func (l *Lexer) readChar() error {
 			return fmt.Errorf("Failed to peek character at line %d, column %d: %w", l.nextPosition.Line, l.nextPosition.Column, err)
 		}
 	} else {
-		ch, err := l.input.ReadByte()
+		ch, _, err := l.input.ReadRune()
 		if err != nil {
 			return fmt.Errorf("Failed to read character at line %d, column %d: %w", l.nextPosition.Line, l.nextPosition.Column, err)
+		} else if ch == unicode.ReplacementChar {
+			return fmt.Errorf("Found invalid UTF-8 character at line %d, column %d", l.nextPosition.Line, l.nextPosition.Column)
 		}
 
 		l.ch = ch
 		l.currPosition.Line = l.nextPosition.Line
 		l.currPosition.Column = l.nextPosition.Column
-		if l.ch == byte('\n') {
+		if l.ch == rune('\n') {
 			l.nextPosition.Line++
 			l.nextPosition.Column = 1
 		} else {
@@ -170,12 +173,12 @@ func (l *Lexer) readChar() error {
 }
 
 // isLetter checks if the input is a letter.
-func isLetter(ch byte) bool {
+func isLetter(ch rune) bool {
 	return 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z' || ch == '_'
 }
 
 // isDigit checks if the input is a digit.
-func isDigit(ch byte) bool {
+func isDigit(ch rune) bool {
 	return '0' <= ch && ch <= '9'
 }
 
@@ -183,7 +186,7 @@ func isDigit(ch byte) bool {
 func (l *Lexer) readIdentifier() (string, error) {
 	var builder strings.Builder
 	for isLetter(l.ch) {
-		builder.WriteByte(l.ch)
+		builder.WriteRune(l.ch)
 		if err := l.readChar(); err != nil {
 			return "", err
 		}
@@ -196,7 +199,7 @@ func (l *Lexer) readIdentifier() (string, error) {
 func (l *Lexer) readInteger() (string, error) {
 	var builder strings.Builder
 	for isDigit(l.ch) {
-		builder.WriteByte(l.ch)
+		builder.WriteRune(l.ch)
 		if err := l.readChar(); err != nil {
 			return "", err
 		}
