@@ -216,17 +216,17 @@ func isLetter(ch rune) bool {
 
 // isDigit checks if the input is a digit.
 func isDigit(ch rune) bool {
-	return '0' <= ch && ch <= '9'
+	return '0' <= ch && ch <= '9' || ch == '_'
 }
 
 // isBinaryDigit checks if the input is a binary digit.
 func isBinaryDigit(ch rune) bool {
-	return ch == '0' || ch == '1'
+	return ch == '0' || ch == '1' || ch == '_'
 }
 
 // isOctalDigit checks if the input is an octal digit.
 func isOctalDigit(ch rune) bool {
-	return '0' <= ch && ch <= '7'
+	return '0' <= ch && ch <= '7' || ch == '_'
 }
 
 // isHexadecimalDigit checks if the input is a hexadecimal digit.

@@ -15,3 +15,6 @@ An interpreter for the Monkey programming language.
   - `0b0101`
   - `0o1234`
   - `0xffa4`
+- `_` support in number literals. Helps when visually parsing numbers.
+  - `0b101_101`
+  - `20_000`

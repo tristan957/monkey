@@ -72,9 +72,9 @@ if (5 < 10) {
 	return false;
 }
 
-let b = 0b010101;
-let o = 0o123456;
-let h = 0xabF127;
+let b = 0b010_101;
+let o = 0o123_456;
+let h = 0xabF_127;
 `
 
 	tests := []struct {
@@ -138,18 +138,18 @@ let h = 0xabF127;
 		{token.LET, "let", token.Span{Start: &token.Position{Line: 16, Column: 1}, End: &token.Position{Line: 16, Column: 3}}},
 		{token.IDENTIFIER, "b", token.Span{Start: &token.Position{Line: 16, Column: 5}, End: &token.Position{Line: 16, Column: 5}}},
 		{token.ASSIGN, "=", token.Span{Start: &token.Position{Line: 16, Column: 7}, End: &token.Position{Line: 16, Column: 7}}},
-		{token.INTEGER, "0b010101", token.Span{Start: &token.Position{Line: 16, Column: 9}, End: &token.Position{Line: 16, Column: 16}}},
-		{token.SEMICOLON, ";", token.Span{Start: &token.Position{Line: 16, Column: 17}, End: &token.Position{Line: 16, Column: 17}}},
+		{token.INTEGER, "0b010_101", token.Span{Start: &token.Position{Line: 16, Column: 9}, End: &token.Position{Line: 16, Column: 17}}},
+		{token.SEMICOLON, ";", token.Span{Start: &token.Position{Line: 16, Column: 18}, End: &token.Position{Line: 16, Column: 18}}},
 		{token.LET, "let", token.Span{Start: &token.Position{Line: 17, Column: 1}, End: &token.Position{Line: 17, Column: 3}}},
 		{token.IDENTIFIER, "o", token.Span{Start: &token.Position{Line: 17, Column: 5}, End: &token.Position{Line: 17, Column: 5}}},
 		{token.ASSIGN, "=", token.Span{Start: &token.Position{Line: 17, Column: 7}, End: &token.Position{Line: 17, Column: 7}}},
-		{token.INTEGER, "0o123456", token.Span{Start: &token.Position{Line: 17, Column: 9}, End: &token.Position{Line: 17, Column: 16}}},
-		{token.SEMICOLON, ";", token.Span{Start: &token.Position{Line: 17, Column: 17}, End: &token.Position{Line: 17, Column: 17}}},
+		{token.INTEGER, "0o123_456", token.Span{Start: &token.Position{Line: 17, Column: 9}, End: &token.Position{Line: 17, Column: 17}}},
+		{token.SEMICOLON, ";", token.Span{Start: &token.Position{Line: 17, Column: 18}, End: &token.Position{Line: 17, Column: 18}}},
 		{token.LET, "let", token.Span{Start: &token.Position{Line: 18, Column: 1}, End: &token.Position{Line: 18, Column: 3}}},
 		{token.IDENTIFIER, "h", token.Span{Start: &token.Position{Line: 18, Column: 5}, End: &token.Position{Line: 18, Column: 5}}},
 		{token.ASSIGN, "=", token.Span{Start: &token.Position{Line: 18, Column: 7}, End: &token.Position{Line: 18, Column: 7}}},
-		{token.INTEGER, "0xabF127", token.Span{Start: &token.Position{Line: 18, Column: 9}, End: &token.Position{Line: 18, Column: 16}}},
-		{token.SEMICOLON, ";", token.Span{Start: &token.Position{Line: 18, Column: 17}, End: &token.Position{Line: 18, Column: 17}}},
+		{token.INTEGER, "0xabF_127", token.Span{Start: &token.Position{Line: 18, Column: 9}, End: &token.Position{Line: 18, Column: 17}}},
+		{token.SEMICOLON, ";", token.Span{Start: &token.Position{Line: 18, Column: 18}, End: &token.Position{Line: 18, Column: 18}}},
 		{token.EOF, "", token.Span{Start: &token.Position{Line: 19, Column: 1}, End: &token.Position{Line: 19, Column: 1}}},
 	}
 
