@@ -4,7 +4,7 @@ import "fmt"
 
 // Span represents the area a token takes up. Start and End are pointers
 // because we can make a slight optimization where Start and End point to the
-// same underlying object.
+// same underlying object in the case of 1 charater tokens.
 type Span struct {
 	Start *Position
 	End   *Position
