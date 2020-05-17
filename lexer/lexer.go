@@ -216,7 +216,7 @@ func (l *Lexer) readChar() error {
 		l.ch = ch
 		l.currPosition.Line = l.nextPosition.Line
 		l.currPosition.Column = l.nextPosition.Column
-		if l.ch == rune('\n') {
+		if l.ch == '\n' {
 			l.nextPosition.Line++
 			l.nextPosition.Column = 1
 		} else {
