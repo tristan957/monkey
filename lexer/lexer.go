@@ -19,6 +19,24 @@ type Lexer struct {
 	ch           rune
 }
 
+// NewFromReader creates a new Lexer from an io.Reader implementation.
+func NewFromReader(input io.Reader) *Lexer {
+	reader := bufio.NewReader(input)
+	l := &Lexer{
+		input: reader,
+		currPosition: &token.Position{
+			Line:   1,
+			Column: 1,
+		},
+		nextPosition: &token.Position{
+			Line:   1,
+			Column: 1,
+		},
+	}
+
+	return l
+}
+
 // NewFromString creates a new Lexer when given a string input.
 func NewFromString(input string) *Lexer {
 	reader := bufio.NewReader(strings.NewReader(input))
